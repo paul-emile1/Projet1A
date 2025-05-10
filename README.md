@@ -22,7 +22,7 @@ où `mu_eps` est un bruit blanc discrétisé. L'équation stochastique correspon
 
 Deux types de convergence sont étudiés :
 
-- **Convergence L^2** :
+- **Convergence L²** :
   
       E[ ||u_eps - u_0||^2 ] ~ C * eps    (vérifiée numériquement)
 
