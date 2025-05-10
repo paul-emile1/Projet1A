@@ -20,7 +20,7 @@ où `mu_eps` est un bruit blanc discrétisé. L'équation stochastique correspon
 
 ### 3. Étude de convergence
 
-Deux types de convergence sont étudiés :
+Deux types de convergence sont étudiés (lorsque eps->0) :
 
 - **Convergence L²** :
   
