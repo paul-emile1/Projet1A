@@ -206,14 +206,13 @@ Z_list, sigma_x1 = Z(eps=eps, n_real=1000)
 # Calculer les valeurs de t pour la CDF
 t_vals = np.linspace(min(Z_list), max(Z_list), 500)
 
-# Fonction pour calculer la CDF empirique
+# Fonction pour calculer la fonction de répartition de Z_eps 
 def fonction_repartition(data, t_vals):
     return [np.mean(np.array(data) <= t) for t in t_vals]
 
-# CDF empirique
 F_emp = fonction_repartition(Z_list, t_vals)
 
-# CDF théorique d'une N(0, sigma_x1^2)
+# fonction de répartition théorique d'une N(0, sigma_x1^2)
 F_theo = norm.cdf(t_vals, loc=0, scale=sigma_x1)
 
 # Tracé
@@ -225,9 +224,6 @@ plt.ylabel("Fonction de répartition")
 plt.title("Comparaison des fonctions de répartition")
 plt.grid()
 plt.legend()
-
-
-
 
 
 
