@@ -22,7 +22,6 @@ def f(x):
 
 
 
-
 ### RÉSOLUTION ÉQUATION DÉTERMINISTE (différences finies et fonctions de Green) ###
 
 def potentiel_deterministe(x):
@@ -158,7 +157,6 @@ plt.grid()
 
 ### CONVERGENCE ERREUR L^2 ###
 
-
 def esperance_erreur_quadratique(eps,sigma = 20, nb_real=100):
     erreur_quadratique = []
     u_0 = solution_deterministe()  # solution de référence
@@ -170,47 +168,19 @@ def esperance_erreur_quadratique(eps,sigma = 20, nb_real=100):
         erreur_quadratique.append(erreur)
     return sqrt(sum(erreur_quadratique) / nb_real)
 
-# eps_list = np.logspace(-3, -1.5, 20)
-# erreurs = [esperance_erreur_quadratique(eps) for eps in eps_list]
+eps_list = np.logspace(-3, -1.5, 20)
+erreurs = [esperance_erreur_quadratique(eps) for eps in eps_list]
 
-# plt.figure(4)
-# plt.loglog(eps_list, erreurs, 'o-', label="Erreur quadratique moyenne")
-# plt.plot(eps_list, np.sqrt(eps_list), '--', label=r"$\sqrt{\varepsilon}$ (référence)")
-# plt.xlabel(r"$\varepsilon$", fontsize = 11)
-# plt.ylabel(r"$\sqrt{\mathbb{E}[\|u^\varepsilon - u^0\|^2]}$", fontsize = 14)
-# plt.title("Convergence de l'erreur moyenne (log-log)")
-# plt.legend()
-# plt.grid(True, which="both", ls="--")
-
-
+plt.figure(4)
+plt.loglog(eps_list, erreurs, 'o-', label="Erreur quadratique moyenne")
+plt.plot(eps_list, np.sqrt(eps_list), '--', label=r"$\sqrt{\varepsilon}$ (référence)")
+plt.xlabel(r"$\varepsilon$", fontsize = 11)
+plt.ylabel(r"$\sqrt{\mathbb{E}[\|u^\varepsilon - u^0\|^2]}$", fontsize = 14)
+plt.title("Convergence de l'erreur moyenne (log-log)")
+plt.legend()
+plt.grid(True, which="both", ls="--")
 
 
-# def integrale_stochastique_green(u0):
-#     A = matrice_schrodinger_deterministe()
-#     G = np.linalg.inv(A)
-#     xi = np.random.randn(N+1)
-#     xi[0], xi[N] = 0, 0  # bruit blanc nul aux bords (conditions de Dirichlet)
-#     I = np.zeros(N+1)
-#     for i in range(N+1):
-#         I[i] = np.sum(G[i, 1:N] * u0[1:N] * xi[1:N]) * 1/h
-#     return I
-# u0 = solution_deterministe()
-# I = integrale_stochastique_green(u0)
-
- # Tracer une réalisation de (u_eps - u0)/sqrt(eps)
-# eps_test = 0.001
-# V_eps = potentiel_stochastique(x_list, sigma, eps_test)
-# u_eps = solution_stochastique(V_eps)
-# rescaled_diff = (u_eps - u0) / sqrt(eps_test)
-
-# plt.figure(figsize=(10,5))
-# plt.plot(x_list, -I, label=r"$\int G(x,y)u_0(y)\,dW_y$")
-# plt.plot(x_list, rescaled_diff, label=r"$(u^\varepsilon - u^0)/\sqrt{\varepsilon}$", linestyle="--")
-# plt.xlabel("x")
-# plt.ylabel("valeur")
-# plt.legend()
-# plt.title("Comparaison convergence vers intégrale stochastique")
-# plt.grid()
 
 
 
@@ -247,7 +217,7 @@ F_emp = fonction_repartition(Z_list, t_vals)
 F_theo = norm.cdf(t_vals, loc=0, scale=sigma_x1)
 
 # Tracé
-plt.figure(figsize=(10, 6))
+plt.figure(5)
 plt.plot(t_vals, F_emp, label=r"$F_{Z^\varepsilon}$ (empirique)")
 plt.plot(t_vals, F_theo, 'r--', label=r"$F_{\mathcal{N}(0, \sigma^2)}$")
 plt.xlabel("t")
@@ -259,46 +229,6 @@ plt.legend()
 
 
 
-
- # convergence terme de gauche 
-# def calcul_esperance(n):
-#     realisations = np.zeros((n,N+1))
-#     for i in range(n):
-#         u_stochastique_i = solution_stochastique(potentiel_stochastique(x_list, sigma, eps))
-#         realisations[i,:] = 1/sqrt(eps)*(u_stochastique_i-u_deterministe)
-#     esperance = np.zeros(N+1)
-#     for k in range(N+1):
-#         for i in range(n):
-#             esperance[k]+=realisations[i][k]
-#     return((1/n)*esperance)
-
-# def calcul_int_diff(u_sto, u_det,eps):
-#     I = 0
-#     for k in range(N):
-#         I+=(1/sqrt(eps)*(u_sto[k]-u_det[k]))
-#     return(I*h)
-
-# def fonction_rep(eps,n_real):
-#     x_list_fct_rep = np.linspace(-1,1,100)
-#     fct_rep = np.zeros(100)
-#     S=np.zeros(n_real)
-#     u_det = solution_deterministe()
-#     for k in range(n_real):
-#         u_sto = solution_stochastique(potentiel_stochastique(x_list, sigma, eps))
-#         S[k] = calcul_int_diff(u_sto,u_det,eps)
-#     for i in range(100):
-#         for k in range(n_real):
-#             if(S[k]<x_list_fct_rep[i]):
-#                 fct_rep[i]+=1
-#     return((1/n_real)*fct_rep,x_list_fct_rep)
-
-# plt.figure(4)
-# plt.plot(fonction_rep(0.01,100)[1],fonction_rep(0.1,100)[0])
-
-# plt.figure(5)
-# plt.plot(x_list,calcul_esperance(1000))
-# plt.xlabel('x')
-# plt.ylabel('espérance')
 
 
 
