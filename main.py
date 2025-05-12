@@ -25,7 +25,7 @@ def f(x):
 ### RÉSOLUTION ÉQUATION DÉTERMINISTE (différences finies et fonctions de Green) ###
 
 def potentiel_deterministe(x):
-    return 20 * (1 + np.sin(2 * np.pi * x))
+    return 20 * (4 + np.sin(2 * np.pi * x))
 
 # Construction de la matrice A
 def matrice_schrodinger_deterministe(V=potentiel_deterministe):
@@ -69,6 +69,8 @@ def solution_green():
     return u
 
 u_deterministe = solution_deterministe()
+
+
 
 # Tracer les deux solutions
 plt.figure(1)
@@ -138,12 +140,35 @@ plt.title('Potentiels déterministe et stochastique')
 plt.grid()
 
 plt.figure(3)
+
+#Calcul de l'espérance des réalisations et d'un IC à 95%
+
+n_real = 100  # nombre de réalisations
+u_list = np.zeros((n_real, N+1))  
+
+for m in range(n_real):
+    V_stoch = potentiel_stochastique(x_list, sigma, eps)
+    u_list[m, :] = solution_stochastique(V_stoch)
+
+# Moyenne et écart-type
+mean_u = np.mean(u_list, axis=0)
+std_u = np.std(u_list, axis=0, ddof=1)  
+
+# Intervalle de confiance à 95%
+lower_bound = mean_u - 1.96 * std_u / np.sqrt(n_real)
+upper_bound = mean_u + 1.96 * std_u / np.sqrt(n_real)
+
+
+
 V_stochastique1 = potentiel_stochastique(x_list, sigma, eps)
 V_stochastique2 = potentiel_stochastique(x_list, sigma, eps)
 
 plt.plot(x_list, solution_stochastique(V_stochastique1), label='u(x, ω₁)')
 plt.plot(x_list, solution_stochastique(V_stochastique2), label='u(x, ω₂)')
 plt.plot(x_list, solution_deterministe(), label='u(x) déterministe')
+plt.plot(x_list,mean_u, label = "E(u(x,ω))")
+plt.plot(x_list, lower_bound,'--' ,color='gray', label="IC à 95%")
+plt.plot(x_list,upper_bound,'--',color = 'gray')
 plt.xlabel('x')
 plt.ylabel('u(x)')
 plt.title('Comparaison des solutions pour deux réalisations')
@@ -206,13 +231,14 @@ Z_list, sigma_x1 = Z(eps=eps, n_real=1000)
 # Calculer les valeurs de t pour la CDF
 t_vals = np.linspace(min(Z_list), max(Z_list), 500)
 
-# Fonction pour calculer la fonction de répartition de Z_eps 
+# Fonction pour calculer la CDF empirique
 def fonction_repartition(data, t_vals):
     return [np.mean(np.array(data) <= t) for t in t_vals]
 
+# CDF empirique
 F_emp = fonction_repartition(Z_list, t_vals)
 
-# fonction de répartition théorique d'une N(0, sigma_x1^2)
+# CDF théorique d'une N(0, sigma_x1^2)
 F_theo = norm.cdf(t_vals, loc=0, scale=sigma_x1)
 
 # Tracé
@@ -229,5 +255,7 @@ plt.legend()
 
 
 
-plt.show()
 
+
+
+plt.show()
